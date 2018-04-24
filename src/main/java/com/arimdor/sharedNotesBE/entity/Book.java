@@ -1,6 +1,7 @@
 package com.arimdor.sharedNotesBE.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,7 +26,8 @@ public class Book implements Serializable {
     @Column(nullable = false)
     private String title;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Note> notes;
 
     @Column(name = "created_by")
