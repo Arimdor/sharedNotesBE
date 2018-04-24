@@ -17,12 +17,12 @@ public class RoleController {
     private final RoleRepository roleRepository;
 
     @Autowired
-    public RoleController(RoleRepository roleRepository){
+    public RoleController(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
 
     @GetMapping("/roles")
-    public ResponseListModel listarRoles(){
+    public ResponseListModel listarRoles() {
         List<Role> role = new ArrayList<>();
         roleRepository.findAll().forEach(role::add);
         ResponseListModel responseListModel = new ResponseListModel(role, "1");

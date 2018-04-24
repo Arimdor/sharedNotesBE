@@ -2,14 +2,18 @@ package com.arimdor.sharedNotesBE.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "Type_Content")
 @JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "id")
 public class TypeContent {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -22,13 +26,15 @@ public class TypeContent {
     @Column
     private String description;
 
-    public TypeContent() {
-    }
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private Date updatedAt;
 
-    public TypeContent(String id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+    @Column(name = "created_at", updatable = false, nullable = false)
+    @CreationTimestamp
+    private Date createdAt;
+
+    public TypeContent() {
     }
 
     public String getId() {
@@ -53,5 +59,21 @@ public class TypeContent {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

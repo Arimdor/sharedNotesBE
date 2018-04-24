@@ -1,13 +1,15 @@
 package com.arimdor.sharedNotesBE.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table
+@Table(name = "contents")
 public class Content implements Serializable {
 
     @Id
@@ -27,12 +29,12 @@ public class Content implements Serializable {
     @Column(nullable = false, updatable = false)
     private String create_by;
 
-    @Column(name = "updated_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
     private Date updatedAt;
 
-    @Column(name = "created_at", updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", updatable = false, nullable = false)
+    @CreationTimestamp
     private Date createdAt;
 
     public Content() {

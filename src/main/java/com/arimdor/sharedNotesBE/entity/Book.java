@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "books")
 @JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "id")
 public class Book implements Serializable {
 
@@ -25,35 +25,27 @@ public class Book implements Serializable {
     @Column(nullable = false)
     private String title;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<Note> notes;
 
     @Column(name = "created_by")
     private String createdBy;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     @UpdateTimestamp
     private Date updatedAt;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false, nullable = false)
     @CreationTimestamp
     private Date createdAt;
 
-    @PrePersist
-    public void addCreationDate() {
-        createdAt = new Date();
-    }
-
-    @PreUpdate
-    public void addUpdatedDate() {
-        updatedAt = new Date();
-    }
 
     public Book() {
     }
 
-    public Book(String title, List<Note> notes) {
+    public Book(String title, String createdBy, List<Note> notes) {
         this.title = title;
+        this.createdBy = createdBy;
         this.notes = notes;
     }
 
