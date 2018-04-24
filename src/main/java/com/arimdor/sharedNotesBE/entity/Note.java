@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table
@@ -27,7 +28,7 @@ public class Note implements Serializable {
     @Column(nullable = false, updatable = false)
     private String create_by;
 
-    @Column
+    @Column(nullable = false, updatable = false)
     @UpdateTimestamp
     private Timestamp updated_at;
 

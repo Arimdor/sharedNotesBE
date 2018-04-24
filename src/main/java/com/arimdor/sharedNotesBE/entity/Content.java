@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table
@@ -79,7 +80,7 @@ public class Content implements Serializable {
         this.content = content;
     }
 
-    public Timestamp getUpdated_at() {
+    public Date getUpdated_at() {
         return updated_at;
     }
 
@@ -87,7 +88,7 @@ public class Content implements Serializable {
         this.updated_at = updated_at;
     }
 
-    public Timestamp getCreated_at() {
+    public Date getCreated_at() {
         return created_at;
     }
 
