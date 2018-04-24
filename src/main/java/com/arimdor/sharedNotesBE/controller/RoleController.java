@@ -6,7 +6,6 @@ import com.arimdor.sharedNotesBE.util.ResponseListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -27,6 +26,6 @@ public class RoleController {
         List<Role> role = new ArrayList<>();
         roleRepository.findAll().forEach(role::add);
         ResponseListModel responseListModel = new ResponseListModel(role, "1");
-        return role;
+        return responseListModel;
     }
 }

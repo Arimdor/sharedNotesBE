@@ -1,12 +1,9 @@
 package com.arimdor.sharedNotesBE.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -14,6 +11,7 @@ import java.util.Date;
 public class Note implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(updatable = false, nullable = false, unique = true)
     private String id;
@@ -28,24 +26,24 @@ public class Note implements Serializable {
     @Column(nullable = false, updatable = false)
     private String create_by;
 
-    @Column(nullable = false, updatable = false)
-    @UpdateTimestamp
-    private Timestamp updated_at;
+    @Column(name = "updated_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
 
-    @Column(nullable = false, updatable = false)
-    @CreationTimestamp
-    private Timestamp created_at;
+    @Column(name = "created_at", updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
     public Note() {
     }
 
-    public Note(String id, String title, Book book, String create_by, Timestamp updated_at, Timestamp created_at) {
+    public Note(String id, String title, Book book, String create_by, Date updatedAt, Date createdAt) {
         this.id = id;
         this.title = title;
         this.book = book;
         this.create_by = create_by;
-        this.updated_at = updated_at;
-        this.created_at = created_at;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -80,19 +78,19 @@ public class Note implements Serializable {
         this.create_by = create_by;
     }
 
-    public Timestamp getUpdated_at() {
-        return updated_at;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(Timestamp updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

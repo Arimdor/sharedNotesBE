@@ -8,7 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +17,7 @@ import java.util.List;
 public class Book implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(updatable = false, nullable = false, unique = true)
     private String id;
@@ -28,21 +28,36 @@ public class Book implements Serializable {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Note> notes;
 
-    @Column(name = "created_by", nullable = false, updatable = false)
+    @Column(name = "created_by")
     private String createdBy;
 
     @Column(name = "updated_at")
     @UpdateTimestamp
-    private Timestamp updatedAt;
+    private Date updatedAt;
 
-    @Column(name = "created_at", updatable = false, insertable = false)
+    @Column(name = "created_at")
     @CreationTimestamp
     private Date createdAt;
+
+    @PrePersist
+    public void addCreationDate() {
+        createdAt = new Date();
+    }
+
+    @PreUpdate
+    public void addUpdatedDate() {
+        updatedAt = new Date();
+    }
 
     public Book() {
     }
 
-    public Book(String id, String title, List<Note> notes, String createdBy, Timestamp updatedAt, Date createdAt) {
+    public Book(String title, List<Note> notes) {
+        this.title = title;
+        this.notes = notes;
+    }
+
+    public Book(String id, String title, List<Note> notes, String createdBy, Date updatedAt, Date createdAt) {
         this.id = id;
         this.title = title;
         this.notes = notes;
@@ -83,11 +98,11 @@ public class Book implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public Timestamp getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
