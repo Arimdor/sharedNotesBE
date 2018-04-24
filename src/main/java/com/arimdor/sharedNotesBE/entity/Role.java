@@ -21,10 +21,10 @@ public class Role implements Serializable {
     private String id;
 
     @Column(nullable = false)
-    private Timestamp name;
+    private String name;
 
     @Column
-    private Timestamp description;
+    private String description;
 
     public Role() {
     }
