@@ -21,11 +21,9 @@ public class Role implements Serializable {
     private String id;
 
     @Column(nullable = false)
-    @UpdateTimestamp
     private Timestamp name;
 
     @Column
-    @UpdateTimestamp
     private Timestamp description;
 
     public Role() {
