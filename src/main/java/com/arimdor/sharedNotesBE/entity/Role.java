@@ -29,7 +29,7 @@ public class Role implements Serializable {
     public Role() {
     }
 
-    public Role(String id, Timestamp name, Timestamp description) {
+    public Role(String id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -43,19 +43,19 @@ public class Role implements Serializable {
         this.id = id;
     }
 
-    public Timestamp getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Timestamp name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Timestamp getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(Timestamp description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 }
