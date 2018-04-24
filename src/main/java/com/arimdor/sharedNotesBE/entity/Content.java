@@ -1,7 +1,5 @@
 package com.arimdor.sharedNotesBE.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,26 +7,25 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 @Table
-@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "id")
-public class Book implements Serializable {
+public class Content implements Serializable {
 
     @Id
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(updatable = false, nullable = false, unique = true)
     private String id;
 
-    @Column(nullable = false)
-    private String title;
-
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Note> notes;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "note_id", referencedColumnName = "id", nullable = false)
+    private Note note;
 
     @Column(nullable = false, updatable = false)
     private String create_by;
+
+    @Column(nullable = false)
+    private String content;
 
     @Column
     @UpdateTimestamp
@@ -38,14 +35,14 @@ public class Book implements Serializable {
     @CreationTimestamp
     private Timestamp created_at;
 
-    public Book() {
+    public Content() {
     }
 
-    public Book(String id, String title, List<Note> notes, String create_by, Timestamp updated_at, Timestamp created_at) {
+    public Content(String id, Note note, String create_by, String content, Timestamp updated_at, Timestamp created_at) {
         this.id = id;
-        this.title = title;
-        this.notes = notes;
+        this.note = note;
         this.create_by = create_by;
+        this.content = content;
         this.updated_at = updated_at;
         this.created_at = created_at;
     }
@@ -58,20 +55,12 @@ public class Book implements Serializable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public Note getNote() {
+        return note;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
+    public void setNote(Note note) {
+        this.note = note;
     }
 
     public String getCreate_by() {
@@ -80,6 +69,14 @@ public class Book implements Serializable {
 
     public void setCreate_by(String create_by) {
         this.create_by = create_by;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Timestamp getUpdated_at() {

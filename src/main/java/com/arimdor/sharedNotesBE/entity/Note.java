@@ -1,7 +1,5 @@
 package com.arimdor.sharedNotesBE.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,12 +7,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 @Table
-@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "id")
-public class Book implements Serializable {
+public class Note implements Serializable {
 
     @Id
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -24,8 +20,9 @@ public class Book implements Serializable {
     @Column(nullable = false)
     private String title;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Note> notes;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false)
+    private Book book;
 
     @Column(nullable = false, updatable = false)
     private String create_by;
@@ -38,13 +35,13 @@ public class Book implements Serializable {
     @CreationTimestamp
     private Timestamp created_at;
 
-    public Book() {
+    public Note() {
     }
 
-    public Book(String id, String title, List<Note> notes, String create_by, Timestamp updated_at, Timestamp created_at) {
+    public Note(String id, String title, Book book, String create_by, Timestamp updated_at, Timestamp created_at) {
         this.id = id;
         this.title = title;
-        this.notes = notes;
+        this.book = book;
         this.create_by = create_by;
         this.updated_at = updated_at;
         this.created_at = created_at;
@@ -66,12 +63,12 @@ public class Book implements Serializable {
         this.title = title;
     }
 
-    public List<Note> getNotes() {
-        return notes;
+    public Book getBook() {
+        return book;
     }
 
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public String getCreate_by() {
