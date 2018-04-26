@@ -7,7 +7,6 @@ import com.arimdor.sharedNotesBE.util.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.List;
 
