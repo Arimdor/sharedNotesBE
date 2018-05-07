@@ -30,13 +30,13 @@ public class Note implements Serializable {
     @Column(nullable = false, updatable = false)
     private String create_by;
 
-    @Column(name = "updated_at", nullable = false)
-    @UpdateTimestamp
-    private Date updatedAt;
-
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     private Date createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private Date updatedAt;
 
     public Note() {
     }

@@ -35,7 +35,7 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseModel> find(@PathVariable("id") String id) {
         try {
-            Book book = bookService.find(id);
+            Book book = bookService.find(id).get();
             return ResponseEntity.ok().body(new ResponseModel<>(2, book, "Se encontro lo solicitado."));
         } catch (NoSuchElementException noSuchElementException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseModel<>(0, null, "No se realizó la operación, no existe un elemento con el ID solicitado."));
@@ -57,7 +57,7 @@ public class BookController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseModel> update(@PathVariable("id") String id, @RequestParam("title") String title) {
         try {
-            Book book = bookService.find(id);
+            Book book = bookService.find(id).get();
             book.setTitle(title);
             bookService.createOrUpdate(book);
             return ResponseEntity.ok().body(new ResponseModel<>(2, book, "Se actualizo lo solicitado."));

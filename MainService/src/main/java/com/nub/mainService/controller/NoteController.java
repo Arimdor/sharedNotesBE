@@ -27,9 +27,9 @@ public class NoteController {
 
     // 2: ok; 1: en proceso, 0: error
     @GetMapping("")
-    public ResponseEntity<ResponseModel> listByBookID(@RequestParam(value = "bookID", required = true) String bookID) {
+    public ResponseEntity<ResponseModel> listByBookID(@RequestParam(value = "bookID") String bookID) {
         try {
-            return ResponseEntity.ok().body(new ResponseModel<>(2, noteService.findAllByNote(bookService.find(bookID)), "Se encontro lo solicitado gg."));
+            return ResponseEntity.ok().body(new ResponseModel<>(2, noteService.findAllByNote(bookService.find(bookID).get()), "Se encontro lo solicitado gg."));
         } catch (NoSuchElementException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseModel<>(0, null, "No existe un elemento con el ID solicitado."));
         } catch (Exception ex) {
@@ -40,7 +40,7 @@ public class NoteController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseModel> find(@PathVariable("id") String id) {
         try {
-            Note note = noteService.find(id);
+            Note note = noteService.find(id).get();
             return ResponseEntity.ok().body(new ResponseModel<>(2, note, "Se encontro lo solicitado."));
         } catch (NoSuchElementException noSuchElementException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseModel<>(0, null, "No se realizó la operación, no existe un elemento con el ID solicitado."));
@@ -55,7 +55,7 @@ public class NoteController {
                                                 @RequestParam("book_id") String bookID,
                                                 @RequestParam("createdBy") String createdBy) {
         try {
-            Note note = noteService.createOrUpdate(new Note(id, title, bookService.find(bookID), createdBy));
+            Note note = noteService.createOrUpdate(new Note(id, title, bookService.find(bookID).get(), createdBy));
             return ResponseEntity.ok().body(new ResponseModel<>(2, note, "Se creo lo solicitado."));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseModel<>(0, null, "Ha ocurrido un error, " + ex.getMessage()));
@@ -65,7 +65,7 @@ public class NoteController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseModel> update(@PathVariable("id") String id, @RequestParam("title") String title) {
         try {
-            Note note = noteService.find(id);
+            Note note = noteService.find(id).get();
             note.setTitle(title);
             noteService.createOrUpdate(note);
             return ResponseEntity.ok().body(new ResponseModel<>(2, note, "Se actualizo lo solicitado."));

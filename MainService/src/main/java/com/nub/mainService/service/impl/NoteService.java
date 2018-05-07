@@ -7,6 +7,8 @@ import com.nub.mainService.service.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class NoteService implements CrudService<Note, String> {
 
@@ -25,8 +27,8 @@ public class NoteService implements CrudService<Note, String> {
     }
 
     @Override
-    public Note find(String id) {
-        return noteRepository.findById(id).get();
+    public Optional<Note> find(String id) {
+        return noteRepository.findById(id);
     }
 
     @Override

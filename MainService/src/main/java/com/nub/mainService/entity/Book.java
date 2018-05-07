@@ -30,14 +30,13 @@ public class Book implements Serializable {
     @Column(name = "created_by")
     private String createdBy;
 
-    @Column(name = "updated_at", nullable = false)
-    @UpdateTimestamp
-    private Date updatedAt;
-
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     private Date createdAt;
 
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private Date updatedAt;
 
     public Book() {
     }

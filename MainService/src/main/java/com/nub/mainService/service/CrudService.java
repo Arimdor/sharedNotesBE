@@ -1,9 +1,11 @@
 package com.nub.mainService.service;
 
+import java.util.Optional;
+
 public interface CrudService<E, K> {
     E createOrUpdate(E object);
 
-    E find(K id);
+    Optional<E> find(K id);
 
     Iterable<E> findAll();
 

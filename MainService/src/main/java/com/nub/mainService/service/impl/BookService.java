@@ -6,6 +6,8 @@ import com.nub.mainService.service.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class BookService implements CrudService<Book, String> {
 
@@ -22,8 +24,8 @@ public class BookService implements CrudService<Book, String> {
     }
 
     @Override
-    public Book find(String id) {
-        return bookRespository.findById(id).get();
+    public Optional<Book> find(String id) {
+        return bookRespository.findById(id);
     }
 
     @Override
