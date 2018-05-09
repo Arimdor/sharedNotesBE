@@ -50,8 +50,7 @@ public class NoteController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseModel> create(@RequestParam("id") String id,
-                                                @RequestParam("title") String title,
+    public ResponseEntity<ResponseModel> create(@RequestParam("title") String title,
                                                 @RequestParam("book_id") String bookID,
                                                 @RequestParam("createdBy") String createdBy) {
         try {
