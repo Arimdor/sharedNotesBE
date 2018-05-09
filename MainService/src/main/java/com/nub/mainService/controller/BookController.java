@@ -1,8 +1,13 @@
 package com.nub.mainService.controller;
 
+import com.nub.mainService.MainServiceApplication;
+import com.nub.mainService.component.RequestTimeInterceptor;
 import com.nub.mainService.entity.Book;
 import com.nub.mainService.model.ResponseModel;
+import com.nub.mainService.repository.UserRepository;
 import com.nub.mainService.service.impl.BookService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -11,15 +16,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @RestController
 @RequestMapping("api/books")
 public class BookController {
 
     private final BookService bookService;
+    private static final Log LOG = LogFactory.getLog(RequestTimeInterceptor.class);
+    private final UserRepository userRepository;
+    private final MainServiceApplication.PubsubOutboundGateway messagingGateway;
 
     @Autowired
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, MainServiceApplication.PubsubOutboundGateway messagingGateway, UserRepository userRepository) {
         this.bookService = bookService;
+        this.messagingGateway = messagingGateway;
+        this.userRepository = userRepository;
     }
 
     // 2: ok; 1: en proceso, 0: error
@@ -47,9 +58,15 @@ public class BookController {
     @PostMapping("")
     public ResponseEntity<ResponseModel> create(@RequestParam("title") String title, @RequestParam("createdBy") String createdBy) {
         try {
+            LOG.debug("create book");
             Book book = bookService.createOrUpdate(new Book(title, createdBy, null));
+            userRepository.findAll().forEach(user -> {
+                LOG.debug(user.getToken());
+                messagingGateway.sendToPubsub(user.getToken());
+            });
             return ResponseEntity.ok().body(new ResponseModel<>(2, book, "Se creo lo solicitado."));
         } catch (Exception ex) {
+            ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseModel<>(0, null, "Ha ocurrido un error, " + ex.getMessage()));
         }
     }
