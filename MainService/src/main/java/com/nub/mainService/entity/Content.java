@@ -23,7 +23,7 @@ public class Content implements Serializable {
     private String id;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "note_id", referencedColumnName = "id", nullable = false)
     private Note note;
 

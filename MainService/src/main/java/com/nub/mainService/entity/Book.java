@@ -25,7 +25,7 @@ public class Book implements Serializable {
     @Column(nullable = false)
     private String title;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Note> notes;
 
     @Column(name = "created_by")
