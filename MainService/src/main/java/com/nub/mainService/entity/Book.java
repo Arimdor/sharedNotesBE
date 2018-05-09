@@ -1,9 +1,9 @@
 package com.nub.mainService.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -17,12 +17,14 @@ import java.util.List;
 public class Book implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(updatable = false, nullable = false, unique = true)
     private String id;
 
     @Column(nullable = false)
     private String title;
-    
+
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Note> notes;
 
@@ -40,8 +42,7 @@ public class Book implements Serializable {
     public Book() {
     }
 
-    public Book(String id, String title, String createdBy, List<Note> notes) {
-        this.id = id;
+    public Book(String title, String createdBy, List<Note> notes) {
         this.title = title;
         this.createdBy = createdBy;
         this.notes = notes;

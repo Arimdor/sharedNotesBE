@@ -45,9 +45,9 @@ public class BookController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseModel> create(@RequestParam("id") String id, @RequestParam("title") String title, @RequestParam("createdBy") String createdBy) {
+    public ResponseEntity<ResponseModel> create(@RequestParam("title") String title, @RequestParam("createdBy") String createdBy) {
         try {
-            Book book = bookService.createOrUpdate(new Book(id, title, createdBy, null));
+            Book book = bookService.createOrUpdate(new Book(title, createdBy, null));
             return ResponseEntity.ok().body(new ResponseModel<>(2, book, "Se creo lo solicitado."));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseModel<>(0, null, "Ha ocurrido un error, " + ex.getMessage()));

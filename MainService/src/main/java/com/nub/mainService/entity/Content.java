@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -16,6 +17,8 @@ import java.util.Date;
 public class Content implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(updatable = false, nullable = false, unique = true)
     private String id;
 
@@ -42,8 +45,7 @@ public class Content implements Serializable {
     public Content() {
     }
 
-    public Content(String id, Note note, String content, String create_by) {
-        this.id = id;
+    public Content(Note note, String content, String create_by) {
         this.note = note;
         this.content = content;
         this.create_by = create_by;

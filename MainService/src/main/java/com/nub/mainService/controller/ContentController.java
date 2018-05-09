@@ -55,12 +55,11 @@ public class ContentController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseModel> createContentText(@RequestParam("id") String id,
-                                                           @RequestParam("note_id") String noteID,
+    public ResponseEntity<ResponseModel> createContentText(@RequestParam("note_id") String noteID,
                                                            @RequestParam("content") String value,
                                                            @RequestParam("createdBy") String createdBy) {
         try {
-            Content content = contentService.createOrUpdate(new Content(id, noteService.find(noteID).get(), value, createdBy));
+            Content content = contentService.createOrUpdate(new Content(noteService.find(noteID).get(), value, createdBy));
             return ResponseEntity.ok().body(new ResponseModel<>(2, content, "Se creo lo solicitado."));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseModel<>(0, null, "Ha ocurrido un error, " + ex.getMessage()));
@@ -68,22 +67,18 @@ public class ContentController {
     }
 
     @PostMapping("multimedia")
-    public ResponseEntity<ResponseModel> createContentImage(@RequestParam("id") String id,
-                                                            @RequestParam("note_id") String noteID,
+    public ResponseEntity<ResponseModel> createContentImage(@RequestParam("note_id") String noteID,
                                                             @RequestParam("image") MultipartFile image,
                                                             @RequestParam("createdBy") String createdBy) {
         try {
-            if (contentService.find(id).isPresent()) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel<>(0, null, "Ya existe un elemento con el mismo id"));
-            } else {
-                String fileName = image.getOriginalFilename();
-                List<Acl> acls = new ArrayList<>();
-                acls.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
-                Blob blob = storage.create(BlobInfo.newBuilder("sharednotes_photos", fileName).setContentType(image.getContentType()).setAcl(acls).build(), image.getBytes());
+            String fileName = image.getOriginalFilename();
+            List<Acl> acls = new ArrayList<>();
+            acls.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
+            Blob blob = storage.create(BlobInfo.newBuilder("sharednotes_photos", fileName).setContentType(image.getContentType()).setAcl(acls).build(), image.getBytes());
 
-                Content content = contentService.createOrUpdate(new Content(id, noteService.find(noteID).get(), blob.getMediaLink(), createdBy));
-                return ResponseEntity.ok().body(new ResponseModel<>(2, content, "Se creo lo solicitado."));
-            }
+            Content content = contentService.createOrUpdate(new Content(noteService.find(noteID).get(), blob.getMediaLink(), createdBy));
+            return ResponseEntity.ok().body(new ResponseModel<>(2, content, "Se creo lo solicitado."));
+
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseModel<>(0, null, "Ha ocurrido un error, " + ex.getMessage()));
         }
