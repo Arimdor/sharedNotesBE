@@ -31,6 +31,9 @@ public class Content implements Serializable {
     @Column(nullable = false, length = 512)
     private String content;
 
+    @Column(nullable = false)
+    private Integer type;
+
     @Column(nullable = false, updatable = false)
     private String create_by;
 
@@ -45,19 +48,29 @@ public class Content implements Serializable {
     public Content() {
     }
 
-    public Content(Note note, String content, String create_by) {
+    public Content(Note note, String content, Integer type, String create_by) {
         this.note = note;
         this.content = content;
+        this.type = type;
         this.create_by = create_by;
     }
 
-    public Content(String id, Note note, String content, String create_by, Date updatedAt, Date createdAt) {
+    public Content(String id, Note note, String content, Integer type, String create_by, Date updatedAt, Date createdAt) {
         this.id = id;
         this.note = note;
         this.content = content;
+        this.type = type;
         this.create_by = create_by;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getId() {

@@ -5,6 +5,7 @@ import com.nub.mainService.entity.Content;
 import com.nub.mainService.model.ResponseModel;
 import com.nub.mainService.service.impl.ContentService;
 import com.nub.mainService.service.impl.NoteService;
+import com.nub.mainService.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -59,8 +60,11 @@ public class ContentController {
                                                            @RequestParam("content") String value,
                                                            @RequestParam("createdBy") String createdBy) {
         try {
-            Content content = contentService.createOrUpdate(new Content(noteService.find(noteID).get(), value, createdBy));
+            Content content = contentService.createOrUpdate(new Content(noteService.find(noteID).get(), value, Constants.TYPE_TEXT, createdBy));
             return ResponseEntity.ok().body(new ResponseModel<>(2, content, "Se creo lo solicitado."));
+
+        } catch (NoSuchElementException noSuchElementException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseModel<>(0, null, "No se realizó la operación, no existe un elemento con el ID solicitado."));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseModel<>(0, null, "Ha ocurrido un error, " + ex.getMessage()));
         }
@@ -76,7 +80,7 @@ public class ContentController {
             acls.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
             Blob blob = storage.create(BlobInfo.newBuilder("sharednotes_photos", fileName).setContentType(image.getContentType()).setAcl(acls).build(), image.getBytes());
 
-            Content content = contentService.createOrUpdate(new Content(noteService.find(noteID).get(), blob.getMediaLink(), createdBy));
+            Content content = contentService.createOrUpdate(new Content(noteService.find(noteID).get(), blob.getMediaLink(), Constants.TYPE_MULTIMEDIA, createdBy));
             return ResponseEntity.ok().body(new ResponseModel<>(2, content, "Se creo lo solicitado."));
 
         } catch (Exception ex) {
