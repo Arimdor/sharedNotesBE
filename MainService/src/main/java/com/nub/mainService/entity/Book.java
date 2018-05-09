@@ -22,8 +22,7 @@ public class Book implements Serializable {
 
     @Column(nullable = false)
     private String title;
-
-    @JsonIgnore
+    
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Note> notes;
 

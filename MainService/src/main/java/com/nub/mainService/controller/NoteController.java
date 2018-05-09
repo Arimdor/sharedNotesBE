@@ -55,7 +55,7 @@ public class NoteController {
                                                 @RequestParam("book_id") String bookID,
                                                 @RequestParam("createdBy") String createdBy) {
         try {
-            Note note = noteService.createOrUpdate(new Note(id, title, bookService.find(bookID).get(), createdBy));
+            Note note = noteService.createOrUpdate(new Note(id, title, bookService.find(bookID).get(), null, createdBy));
             return ResponseEntity.ok().body(new ResponseModel<>(2, note, "Se creo lo solicitado."));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseModel<>(0, null, "Ha ocurrido un error, " + ex.getMessage()));

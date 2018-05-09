@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "notes")
@@ -27,6 +28,9 @@ public class Note implements Serializable {
     @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false)
     private Book book;
 
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Content> contents;
+
     @Column(nullable = false, updatable = false)
     private String create_by;
 
@@ -41,20 +45,22 @@ public class Note implements Serializable {
     public Note() {
     }
 
-    public Note(String id, String title, Book book, String create_by) {
+    public Note(String id, String title, Book book, List<Content> contents, String create_by) {
         this.id = id;
         this.title = title;
         this.book = book;
+        this.contents = contents;
         this.create_by = create_by;
     }
 
-    public Note(String id, String title, Book book, String create_by, Date updatedAt, Date createdAt) {
+    public Note(String id, String title, Book book, List<Content> contents, String create_by, Date createdAt, Date updatedAt) {
         this.id = id;
         this.title = title;
         this.book = book;
+        this.contents = contents;
         this.create_by = create_by;
-        this.updatedAt = updatedAt;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public String getId() {
@@ -81,6 +87,14 @@ public class Note implements Serializable {
         this.book = book;
     }
 
+    public List<Content> getContents() {
+        return contents;
+    }
+
+    public void setContents(List<Content> contents) {
+        this.contents = contents;
+    }
+
     public String getCreate_by() {
         return create_by;
     }
@@ -89,19 +103,19 @@ public class Note implements Serializable {
         this.create_by = create_by;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
